@@ -1,0 +1,38 @@
+# 复制为 terraform.tfvars 后按需修改。
+# 凭据不在这里配置——AK/SK 一律走环境变量：
+#   export HW_ACCESS_KEY=<AK>
+#   export HW_SECRET_KEY=<SK>
+#   export HW_REGION_NAME=cn-south-1
+
+region      = "cn-south-1"
+name_prefix = "cf2privapi"
+
+# 必填：允许 SSH 登录跳板机的来源。写你的公网出口 IP/32，不接受 0.0.0.0/0。
+#   curl -s https://myip.ipip.net
+bastion_ssh_source_cidr = "203.0.113.10/32"
+
+# --- 以下均有默认值，通常不需要改 ---
+
+# vpc_cidr      = "192.168.0.0/16"
+# subnet_a_cidr = "192.168.0.0/24"
+# subnet_b_cidr = "192.168.1.0/24"
+
+# 留空取本区域第一个可用区。APIG 专享版在个别可用区可能无库存，报错时换一个。
+# availability_zones = ["cn-south-1a"]
+
+# APIG 专享版规格。BASIC 是最小规格。
+# apig_edition = "BASIC"
+
+# 七层规格。固定规格里的最小档；改动前先 terraform console 实查本区域目录。
+# elb_flavor_type = "L7"
+# elb_flavor_name = "L7_flavor.elb.s1.small"
+
+# 监听器来源白名单（独享型 ELB 无安全组，用 IP 地址组做访问控制）。
+# elb_allowed_cidrs = ["192.168.0.0/16"]
+
+# ELB → APIG 这一跳的协议。HTTPS 为加密回源；握手异常时可退化为 HTTP。
+# apig_backend_protocol = "HTTPS"
+
+# 验证完成后置 false 可单独销毁跳板机止血，保留 APIG/ELB 继续观察。
+# enable_bastion    = true
+# bastion_flavor_id = "s6.small.1"
